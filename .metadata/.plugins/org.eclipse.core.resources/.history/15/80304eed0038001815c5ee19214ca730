@@ -1,0 +1,5 @@
+import robocode.Robot;
+
+public class MyRobot extends Robot {
+
+}

@@ -1,0 +1,6 @@
+package eu.erasmus.intelligentSystems.search.routeFinder;
+import robocode.control.*;
+
+public class RouteFinder {
+
+}
