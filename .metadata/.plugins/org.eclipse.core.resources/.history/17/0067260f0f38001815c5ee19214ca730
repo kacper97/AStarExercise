@@ -41,7 +41,7 @@ public class RouteFinder {
 		/*
 		 * Create the agent and place it in a random position without obstacle
 		 */
-		existingRobots[NumObstacles] = modelRobots[0]; // TODO load MazeBoat instead
+		existingRobots[NumObstacles] = modelRobots[1];
 		double InitialAgentRow = 412;
 		double InitialAgentCol = 32;
 		robotSetups[NumObstacles] = new RobotSetup(InitialAgentRow, InitialAgentCol, 0.0);
