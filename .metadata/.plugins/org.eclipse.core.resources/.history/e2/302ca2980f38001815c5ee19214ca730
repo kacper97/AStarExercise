@@ -6,7 +6,7 @@ import robocode.control.*;
 public class RouteFinder {
 	public static void main(String[] args) {
 		// Create the RobocodeEngine
-		RobocodeEngine engine = new RobocodeEngine(new java.io.File("/Users/denisdrobny/robocode")); // TODO this should be changed depending on user starting the program
+		RobocodeEngine engine = new RobocodeEngine(new java.io.File("/Users/denisdrobny/robocode"));
 		// Run from /Users/denisdrobny/robocode
 		// Show the Robocode battle view
 		engine.setVisible(true);
