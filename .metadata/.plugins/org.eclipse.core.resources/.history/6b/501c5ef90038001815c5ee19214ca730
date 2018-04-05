@@ -1,6 +1,0 @@
-package eu.erasmus.intelligentSystems.search.MazeBot;
-import robocode.Robot;
-
-public class MyRobot extends Robot {
-
-}
