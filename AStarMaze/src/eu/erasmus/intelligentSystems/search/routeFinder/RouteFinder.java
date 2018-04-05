@@ -1,7 +1,6 @@
 package eu.erasmus.intelligentSystems.search.routeFinder;
 
 import java.util.Random;
-
 import robocode.control.*;
 
 public class RouteFinder {
