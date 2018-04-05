@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item value="/Users/denisdrobny/robocode/libs" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="/Users/denisdrobny/eclipse-workspace/MyRobots/src" key="org.eclipse.jdt.ui.last.external.project"/>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="2" key="layout"/>
 		<item value="true" key="group_libraries"/>

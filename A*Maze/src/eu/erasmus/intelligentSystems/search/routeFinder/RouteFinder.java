@@ -1,21 +1,24 @@
 package eu.erasmus.intelligentSystems.search.routeFinder;
 
+import java.util.Random;
+
 import eu.erasmus.intelligentSystems.search.MazeBot.*;
 import robocode.control.*;
 
 public class RouteFinder {
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
+		
 		// Create the RobocodeEngine
 		RobocodeEngine engine = new RobocodeEngine(new java.io.File("/Users/denisdrobny/robocode")); // TODO this should be changed depending on user starting the program
 		// Run from /Users/denisdrobny/robocode
 		// Show the Robocode battle view
 		engine.setVisible(true);
 		// Create the battlefield
-
-		// 10x10
-		int NumPixelRows = 640; 
-		int NumPixelCols = 640;
-		int NumObstacles = 3; // TODO
+		int generateObstaclesSeed = 1;
+		int fieldSize = 10;
+		int NumPixelRows = 64*10; 
+		int NumPixelCols = 64*10;
+		int NumObstacles = fieldSize*fieldSize * 3 / 10; // TODO
 
 		BattlefieldSpecification battlefield = new BattlefieldSpecification(NumPixelRows, NumPixelCols);
 		// 800x600
@@ -29,15 +32,12 @@ public class RouteFinder {
 		 * Create obstacles and place them at random so that no pair of obstacles are at
 		 * the same position
 		 */
-		RobotSpecification[] modelRobots = engine.getLocalRepository("sample.SittingDuck,searchpractice.MazeBot");
+		RobotSpecification[] modelRobots = engine.getLocalRepository("sample.SittingDuck,eu.erasmus.intelligentSystems.search.MazeBot.MazeBot*");
 		RobotSpecification[] existingRobots = new RobotSpecification[NumObstacles + 1];
 		RobotSetup[] robotSetups = new RobotSetup[NumObstacles + 1];
-		for (int NdxObstacle = 0; NdxObstacle < NumObstacles; NdxObstacle++) {
-			double InitialObstacleRow = (NdxObstacle * 64)+32;
-			double InitialObstacleCol = InitialObstacleRow;
-			existingRobots[NdxObstacle] = modelRobots[0];
-			robotSetups[NdxObstacle] = new RobotSetup(InitialObstacleRow, InitialObstacleCol, 0.0);
-		}
+		
+		boolean[] occupiedField = generateObstacleMap(fieldSize,generateObstaclesSeed,NumObstacles);
+		addRobotsToMap(occupiedField,modelRobots,existingRobots,robotSetups);
 		/*
 		 * Create the agent and place it in a random position without obstacle
 		 */
@@ -54,5 +54,34 @@ public class RouteFinder {
 		//engine.close();
 		// Make sure that the Java VM is shut down properly
 		//System.exit(0);
+	}
+	
+	private static boolean[] generateObstacleMap(int fieldSize,int seed, int numObstacles){
+		Random generator = new Random(seed);
+		boolean [] occupiedField = new boolean[fieldSize*fieldSize];
+		for (int currentObstacle = 0; currentObstacle < numObstacles; currentObstacle++) {
+			int initialObstacleRow = generator.nextInt(fieldSize);
+			int initialObstacleCol = generator.nextInt(fieldSize);
+			while (occupiedField[initialObstacleRow*initialObstacleCol]) {
+				initialObstacleRow = generator.nextInt(fieldSize);
+				initialObstacleCol = generator.nextInt(fieldSize);
+			}
+			occupiedField[initialObstacleRow*initialObstacleCol] = true;
+		}
+		return occupiedField;
+	}
+	
+	private static void addRobotsToMap(boolean[] occupiedField,RobotSpecification[] modelRobots,RobotSpecification[] existingRobots,RobotSetup[] robotSetups) {
+		int fieldSize = occupiedField.length / 2;
+		int numOfAdded = 0;
+		for	(int i = 0; i < fieldSize; i++) {
+			for	(int j = 0; j < fieldSize; j++) {
+				if (occupiedField[i*j]) {
+					existingRobots[numOfAdded] = modelRobots[0];
+					robotSetups[numOfAdded] = new RobotSetup((double)i* 64+32, (double)j*64+32, 0.0);
+					numOfAdded++;
+				}
+			}
+		}
 	}
 }

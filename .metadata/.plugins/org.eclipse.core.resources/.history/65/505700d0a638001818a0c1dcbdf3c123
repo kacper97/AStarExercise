@@ -1,0 +1,9 @@
+package eu.erasmus.intelligentSystems.search.MazeBot;
+import robocode.Robot;
+
+public class MazeBot extends Robot {
+	private int _fieldSize = 10;
+	private int _seed = 1;
+}
+
+

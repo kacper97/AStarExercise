@@ -1,1 +1,4 @@
 1522843726841	Move compilation unit
+1522915298071	Rename local variable 'InitialObstacleRow'
+1522915311669	Rename local variable 'InitialObstacleCol'
+1522915323762	Rename local variable 'NdxObstacle'
