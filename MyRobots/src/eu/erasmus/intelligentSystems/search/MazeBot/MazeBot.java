@@ -11,6 +11,8 @@ public class MazeBot extends Robot {
 	private boolean[] _occupiedFields;
 	private int _myRow;
 	private int _myCol;
+	private int _goalRow;
+	private int _goalCol;
 	
 	
 	public MazeBot(){
@@ -36,6 +38,15 @@ public class MazeBot extends Robot {
 		}
 		_myRow = i;
 		_myCol = j;
+		// Generate the goal state. Doesn't need to be synced with RouteFinder Class
+		i = generator.nextInt(_fieldSize);
+		j = generator.nextInt(_fieldSize);
+		while (_occupiedFields[i*_fieldSize+j]) {
+			i = generator.nextInt(_fieldSize);
+			j = generator.nextInt(_fieldSize);
+		}
+		_goalRow = i;
+		_goalCol = j;
 	}
 	
 	// A* Algorithm implementation
