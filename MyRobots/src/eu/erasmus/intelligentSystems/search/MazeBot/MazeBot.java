@@ -7,16 +7,16 @@ import java.util.Random;
 import robocode.Robot;
 
 public class MazeBot extends Robot {
-	private int _fieldSize = 10;
+	private int _fieldSize = 7;
 	private int _obstacleSeed = 1;
 	private int _agentSeed = 2;
 	private int _numObstacles = _fieldSize * _fieldSize * 3 / 10;
 	private boolean[] _closedCells;
-	private Cell _currentCell;
+	private EvaluatedCell _currentCell;
 	private Cell _goalCell;
+	private List<Cell> _pathFromStartToEnd;
 	
-	
-	public MazeBot(){
+	public MazeBot(){ 
 		Random generator = new Random(_obstacleSeed);
 		_closedCells = new boolean[_fieldSize*_fieldSize];
 		// Injecting the same picuture of map that is generated also in RoutFinder class
@@ -37,7 +37,9 @@ public class MazeBot extends Robot {
 			i = generator.nextInt(_fieldSize);
 			j = generator.nextInt(_fieldSize);
 		}
-		_currentCell = new Cell(i,j);
+		_currentCell = new EvaluatedCell(new Cell(i,j),0,0,new ArrayList<Cell>()); // Estimation here is not going to be taken into account since the cell 
+														   						 // will not appear in the queue
+		_closedCells[i*_fieldSize+j] = true;
 		// Generate the goal state. Doesn't need to be synced with RouteFinder Class
 		i = generator.nextInt(_fieldSize);
 		j = generator.nextInt(_fieldSize);
@@ -45,21 +47,27 @@ public class MazeBot extends Robot {
 			i = generator.nextInt(_fieldSize);
 			j = generator.nextInt(_fieldSize);
 		}
-		_goalCell = new Cell(i,j);
+		_goalCell = new Cell(i,j); // TODO set the goal on the edge of the map
 	}
 	
-	// A* Algorithm implementation
-	private void FindRoute() {
+	public void run() {
+		_pathFromStartToEnd = FindRoute();
+	}
+	
+	// A* implementation
+	// Returns path from start to goal as sequence of cells
+	private List<Cell> FindRoute() {
 		int[] estimatedCells = createEstimation();
 		PriorityQueue<EvaluatedCell> queue = new PriorityQueue<EvaluatedCell>();
-		
-		EvaluatedCell chosen = queue.poll();
-		while(chosen != null && chosen.get_cell().compareTo(_goalCell) != 0) {
-			
-			
-			chosen = queue.poll();
-			_closedCells[chosen.get_row()*_fieldSize+chosen.get_col()] = true; // After choosing we close the cell
+		while(_currentCell != null && _currentCell.get_cell().compareTo(_goalCell) != 0) {
+			_closedCells[_currentCell.get_row()*_fieldSize+_currentCell.get_col()] = true; // After choosing we close the cell
+			queue.addAll(get_neighbours(_currentCell,queue,estimatedCells));
+			_currentCell = queue.poll();
 		}
+		if (_currentCell == null) { // The goal state is not accesible so we haven't found any path
+			return null;
+		}
+		return _currentCell.get_pathFromStart(); 
 	}
 	
 	// Heuristic function result written into every cell, manhattan distance from the goal state
@@ -90,7 +98,7 @@ public class MazeBot extends Robot {
 		int cost;
 		int estimation;
 		if(c1.get_col() < _fieldSize && !_closedCells[c1.get_row()*_fieldSize+c1.get_col()] ) { 
-			cost = middle.get_costFromStart();
+			cost = middle.get_costFromStart() + 1; // Since it's middle's neighbour and the path leads through middle it is one step further from the start than middle
 			estimation = estimatedCells[c1.get_row()*_fieldSize+c1.get_col()];
 			List<Cell> path = new ArrayList<Cell>(middle.get_pathFromStart());
 			queue.add(new EvaluatedCell(c1, estimation, cost, path)); 

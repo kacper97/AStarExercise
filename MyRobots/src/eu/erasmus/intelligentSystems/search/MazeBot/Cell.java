@@ -3,7 +3,7 @@ package eu.erasmus.intelligentSystems.search.MazeBot;
 public class Cell implements Comparable<Cell> {
 	private int _row;
 	private int _col;
-	public Cell(int row, int col) {
+	public Cell(int col,int row) {
 		_row = row;
 		_col = col;
 	}

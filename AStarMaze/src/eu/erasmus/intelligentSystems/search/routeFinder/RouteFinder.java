@@ -13,9 +13,9 @@ public class RouteFinder {
 		engine.setVisible(true);
 		// Create the battlefield
 		int generateObstaclesSeed = 1;
-		int fieldSize = 10;
-		int NumPixelRows = 64*10; 
-		int NumPixelCols = 64*10;
+		int fieldSize = 7;
+		int NumPixelRows = 64*fieldSize; 
+		int NumPixelCols = 64*fieldSize;
 		int NumObstacles = fieldSize*fieldSize * 3 / 10;
 
 		BattlefieldSpecification battlefield = new BattlefieldSpecification(NumPixelRows, NumPixelCols);
