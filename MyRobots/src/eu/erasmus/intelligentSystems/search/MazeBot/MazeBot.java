@@ -23,6 +23,9 @@ public class MazeBot extends Robot {
 			_occupiedFields[initialObstacleRow*_fieldSize+initialObstacleCol] = true;
 		}
 	}
+	
+	// A* Algorithm implementation 
+	private void FindRoute()
 }
 
 
