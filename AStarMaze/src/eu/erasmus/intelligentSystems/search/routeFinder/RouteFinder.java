@@ -2,7 +2,6 @@ package eu.erasmus.intelligentSystems.search.routeFinder;
 
 import java.util.Random;
 
-import eu.erasmus.intelligentSystems.search.MazeBot.*;
 import robocode.control.*;
 
 public class RouteFinder {
@@ -18,7 +17,7 @@ public class RouteFinder {
 		int fieldSize = 10;
 		int NumPixelRows = 64*10; 
 		int NumPixelCols = 64*10;
-		int NumObstacles = fieldSize*fieldSize * 3 / 10; // TODO
+		int NumObstacles = fieldSize*fieldSize * 3 / 10;
 
 		BattlefieldSpecification battlefield = new BattlefieldSpecification(NumPixelRows, NumPixelCols);
 		// 800x600
@@ -41,10 +40,10 @@ public class RouteFinder {
 		/*
 		 * Create the agent and place it in a random position without obstacle
 		 */
-		existingRobots[NumObstacles] = modelRobots[0]; // TODO load MazeBoat instead
-		double InitialAgentRow = 412;
-		double InitialAgentCol = 32;
-		robotSetups[NumObstacles] = new RobotSetup(InitialAgentRow, InitialAgentCol, 0.0);
+		existingRobots[NumObstacles] = modelRobots[1]; 
+		int agentSeed = 2;
+		placeAgent(agentSeed,fieldSize,NumObstacles,robotSetups,occupiedFields);
+		
 		/* Create and run the battle */
 		BattleSpecification battleSpec = new BattleSpecification(battlefield, numberOfRounds, inactivityTime,
 				gunCoolingRate, sentryBorderSize, hideEnemyNames, existingRobots, robotSetups);
@@ -69,6 +68,19 @@ public class RouteFinder {
 			occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol] = true;
 		}
 		return occupiedFields;
+	}
+	
+	private static void placeAgent(int seed,int fieldSize,int NumObstacles,RobotSetup[] robotSetups,boolean[] occupiedFields) {
+		Random generator = new Random(seed);
+		int i = generator.nextInt(fieldSize);
+		int j = generator.nextInt(fieldSize);
+		while (occupiedFields[i*fieldSize+j]) {
+			i = generator.nextInt(fieldSize);
+			j = generator.nextInt(fieldSize);
+		}
+		double InitialAgentRow = i*64+32;
+		double InitialAgentCol = j*64+32;
+		robotSetups[NumObstacles] = new RobotSetup(InitialAgentRow, InitialAgentCol, 0.0);
 	}
 	
 	private static void addRobotsToMap(boolean[] occupiedField,RobotSpecification[] modelRobots,RobotSpecification[] existingRobots,RobotSetup[] robotSetups) {
