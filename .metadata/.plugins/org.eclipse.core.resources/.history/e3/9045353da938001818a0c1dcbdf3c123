@@ -62,11 +62,11 @@ public class RouteFinder {
 		for (int currentObstacle = 0; currentObstacle < numObstacles; currentObstacle++) {
 			int initialObstacleRow = generator.nextInt(fieldSize);
 			int initialObstacleCol = generator.nextInt(fieldSize);
-			while (occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol]) {
+			while (occupiedFields[initialObstacleRow*initialObstacleCol]) {
 				initialObstacleRow = generator.nextInt(fieldSize);
 				initialObstacleCol = generator.nextInt(fieldSize);
 			}
-			occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol] = true;
+			occupiedFields[initialObstacleRow*initialObstacleCol] = true;
 		}
 		return occupiedFields;
 	}
@@ -76,7 +76,7 @@ public class RouteFinder {
 		int numOfAdded = 0;
 		for	(int i = 0; i < fieldSize; i++) {
 			for	(int j = 0; j < fieldSize; j++) {
-				if (occupiedField[i*fieldSize+j]) {
+				if (occupiedField[i*j]) {
 					existingRobots[numOfAdded] = modelRobots[0];
 					robotSetups[numOfAdded] = new RobotSetup((double)i* 64+32, (double)j*64+32, 0.0);
 					numOfAdded++;

@@ -62,11 +62,11 @@ public class RouteFinder {
 		for (int currentObstacle = 0; currentObstacle < numObstacles; currentObstacle++) {
 			int initialObstacleRow = generator.nextInt(fieldSize);
 			int initialObstacleCol = generator.nextInt(fieldSize);
-			while (occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol]) {
+			while (occupiedFields[initialObstacleRow*fieldSize +initialObstacleCol]) {
 				initialObstacleRow = generator.nextInt(fieldSize);
 				initialObstacleCol = generator.nextInt(fieldSize);
 			}
-			occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol] = true;
+			occupiedFields[initialObstacleRow*initialObstacleCol] = true;
 		}
 		return occupiedFields;
 	}

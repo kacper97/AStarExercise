@@ -36,8 +36,8 @@ public class RouteFinder {
 		RobotSpecification[] existingRobots = new RobotSpecification[NumObstacles + 1];
 		RobotSetup[] robotSetups = new RobotSetup[NumObstacles + 1];
 		
-		boolean[] occupiedFields = generateObstacleMap(fieldSize,generateObstaclesSeed,NumObstacles);
-		addRobotsToMap(occupiedFields,modelRobots,existingRobots,robotSetups);
+		boolean[] occupiedField = generateObstacleMap(fieldSize,generateObstaclesSeed,NumObstacles);
+		addRobotsToMap(occupiedField,modelRobots,existingRobots,robotSetups);
 		/*
 		 * Create the agent and place it in a random position without obstacle
 		 */
@@ -58,25 +58,25 @@ public class RouteFinder {
 	
 	private static boolean[] generateObstacleMap(int fieldSize,int seed, int numObstacles){
 		Random generator = new Random(seed);
-		boolean [] occupiedFields = new boolean[fieldSize*fieldSize];
+		boolean [] occupiedField = new boolean[fieldSize*fieldSize];
 		for (int currentObstacle = 0; currentObstacle < numObstacles; currentObstacle++) {
 			int initialObstacleRow = generator.nextInt(fieldSize);
 			int initialObstacleCol = generator.nextInt(fieldSize);
-			while (occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol]) {
+			while (occupiedField[initialObstacleRow*initialObstacleCol]) {
 				initialObstacleRow = generator.nextInt(fieldSize);
 				initialObstacleCol = generator.nextInt(fieldSize);
 			}
-			occupiedFields[initialObstacleRow*fieldSize+initialObstacleCol] = true;
+			occupiedField[initialObstacleRow*initialObstacleCol] = true;
 		}
-		return occupiedFields;
+		return occupiedField;
 	}
 	
 	private static void addRobotsToMap(boolean[] occupiedField,RobotSpecification[] modelRobots,RobotSpecification[] existingRobots,RobotSetup[] robotSetups) {
-		int fieldSize = (int)Math.sqrt(occupiedField.length);
+		int fieldSize = occupiedField.length / 2;
 		int numOfAdded = 0;
 		for	(int i = 0; i < fieldSize; i++) {
 			for	(int j = 0; j < fieldSize; j++) {
-				if (occupiedField[i*fieldSize+j]) {
+				if (occupiedField[i*j]) {
 					existingRobots[numOfAdded] = modelRobots[0];
 					robotSetups[numOfAdded] = new RobotSetup((double)i* 64+32, (double)j*64+32, 0.0);
 					numOfAdded++;

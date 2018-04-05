@@ -16,11 +16,11 @@ public class MazeBot extends Robot {
 		for (int currentObstacle = 0; currentObstacle < _numObstacles; currentObstacle++) {
 			int initialObstacleRow = generator.nextInt(_fieldSize);
 			int initialObstacleCol = generator.nextInt(_fieldSize);
-			while (_occupiedFields[initialObstacleRow*_fieldSize+initialObstacleCol]) {
+			while (_occupiedFields[initialObstacleRow*initialObstacleCol]) {
 				initialObstacleRow = generator.nextInt(_fieldSize);
 				initialObstacleCol = generator.nextInt(_fieldSize);
 			}
-			_occupiedFields[initialObstacleRow*_fieldSize+initialObstacleCol] = true;
+			_occupiedFields[initialObstacleRow*initialObstacleCol] = true;
 		}
 	}
 }
