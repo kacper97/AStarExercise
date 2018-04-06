@@ -57,8 +57,8 @@ public class MazeBot extends Robot {
 	// A* implementation
 	// Returns path from start to goal as sequence of cells
 	private List<Cell> FindRoute() {
+		PriorityQueue<EvaluatedCell> queue = new PriorityQueue<>();
 		int[] estimatedCells = createEstimation();
-		PriorityQueue<EvaluatedCell> queue = new PriorityQueue<EvaluatedCell>();
 		while(_currentCell != null && _currentCell.get_cell().compareTo(_goalCell) != 0) {
 			_closedCells[_currentCell.get_row()*_fieldSize+_currentCell.get_col()] = true; // After choosing we close the cell
 			queue.addAll(get_neighbours(_currentCell,queue,estimatedCells));
@@ -87,21 +87,25 @@ public class MazeBot extends Robot {
 		Cell c2 = new Cell(middle.get_row(),middle.get_col() - 1);
 		Cell c3 = new Cell(middle.get_row() - 1, middle.get_col());
 		Cell c4 = new Cell(middle.get_row() + 1, middle.get_col());
-		addCellToQueue(queue,c1,middle,estimatedCells);
-		addCellToQueue(queue,c2,middle,estimatedCells);
-		addCellToQueue(queue,c3,middle,estimatedCells);
-		addCellToQueue(queue,c4,middle,estimatedCells);
+		addCellToListIfCorrect(result,c1,middle,estimatedCells);
+		addCellToListIfCorrect(result,c2,middle,estimatedCells);
+		addCellToListIfCorrect(result,c3,middle,estimatedCells);
+		addCellToListIfCorrect(result,c4,middle,estimatedCells);
 		return result;
 	}
 	
-	private void addCellToQueue(PriorityQueue<EvaluatedCell> queue, Cell c1, EvaluatedCell middle,int[] estimatedCells) {
+	private void addCellToListIfCorrect(List<EvaluatedCell> list, Cell c1, EvaluatedCell middle,int[] estimatedCells) {
 		int cost;
 		int estimation;
-		if(c1.get_col() < _fieldSize && !_closedCells[c1.get_row()*_fieldSize+c1.get_col()] ) { 
+		if(c1.get_col() < _fieldSize &&
+				c1.get_col() >= 0 &&
+				c1.get_row() < _fieldSize &&
+				c1.get_row() >= 0 &&
+				!_closedCells[c1.get_row()*_fieldSize+c1.get_col()] ) { 
 			cost = middle.get_costFromStart() + 1; // Since it's middle's neighbour and the path leads through middle it is one step further from the start than middle
 			estimation = estimatedCells[c1.get_row()*_fieldSize+c1.get_col()];
 			List<Cell> path = new ArrayList<Cell>(middle.get_pathFromStart());
-			queue.add(new EvaluatedCell(c1, estimation, cost, path)); 
+			list.add(new EvaluatedCell(c1, estimation, cost, path)); 
 			}
 	}
 }

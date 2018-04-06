@@ -79,7 +79,7 @@ public class RouteFinder {
 		}
 		double InitialAgentRow = i*64+32;
 		double InitialAgentCol = j*64+32;
-		robotSetups[NumObstacles] = new RobotSetup(InitialAgentRow, InitialAgentCol, 0.0);
+		robotSetups[NumObstacles] = new RobotSetup(InitialAgentCol,InitialAgentRow, 0.0);
 	}
 	
 	private static void addRobotsToMap(boolean[] occupiedField,RobotSpecification[] modelRobots,RobotSpecification[] existingRobots,RobotSetup[] robotSetups) {
@@ -89,7 +89,7 @@ public class RouteFinder {
 			for	(int j = 0; j < fieldSize; j++) {
 				if (occupiedField[i*fieldSize+j]) {
 					existingRobots[numOfAdded] = modelRobots[0];
-					robotSetups[numOfAdded] = new RobotSetup((double)i* 64+32, (double)j*64+32, 0.0);
+					robotSetups[numOfAdded] = new RobotSetup((double)j*64+32,(double)i* 64+32,0.0);
 					numOfAdded++;
 				}
 			}
