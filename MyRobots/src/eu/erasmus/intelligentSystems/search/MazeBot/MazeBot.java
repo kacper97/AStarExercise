@@ -12,9 +12,10 @@ public class MazeBot extends Robot {
 	private int _agentSeed = 2;
 	private int _numObstacles = _fieldSize * _fieldSize * 3 / 10;
 	private boolean[] _closedCells;
-	private EvaluatedCell _currentCell;
+	private Cell _currentCell;
 	private Cell _goalCell;
 	private List<Cell> _pathFromStartToEnd;
+	private Direction _direction = Direction.Up;
 	
 	public MazeBot(){ 
 		Random generator = new Random(_obstacleSeed);
@@ -37,8 +38,7 @@ public class MazeBot extends Robot {
 			i = generator.nextInt(_fieldSize);
 			j = generator.nextInt(_fieldSize);
 		}
-		_currentCell = new EvaluatedCell(new Cell(i,j),0,0,new ArrayList<Cell>()); // Estimation here is not going to be taken into account since the cell 
-														   						 // will not appear in the queue
+		_currentCell = new Cell(i,j);
 		_closedCells[i*_fieldSize+j] = true;
 		// Generate the goal state. Doesn't need to be synced with RouteFinder Class
 		i = generator.nextInt(_fieldSize);
@@ -52,7 +52,43 @@ public class MazeBot extends Robot {
 	}
 	
 	public void run() {
+		int tileSize = 64;
 		_pathFromStartToEnd = FindRoute();
+		if (_pathFromStartToEnd == null) return;
+		for(int i = 1; i < _pathFromStartToEnd.size(); i++) {
+			Cell next = _pathFromStartToEnd.get(i);
+			changeOrientationByNextPosition(next);
+			_currentCell = next;
+			this.ahead(tileSize); 
+		}
+	}
+	
+	private void changeOrientationByNextPosition(Cell nextCell) {
+		Direction newDirection = whichWayToMove(nextCell.get_row(), nextCell.get_col());
+		double difference = newDirection.get_degress() - _direction.get_degress();
+		//if (difference < 0) { difference += 360;}
+		turnRight(difference);
+		_direction = newDirection;
+	}
+	
+	private Direction whichWayToMove(int nextRow, int nextCol) {
+		if (nextRow != _currentCell.get_row()) {
+			if (nextRow == _currentCell.get_row() - 1) {
+				return Direction.Down;
+			}
+			else {
+				return Direction.Up;
+			}
+		}
+		else if (nextCol != _currentCell.get_col()) {
+			if (nextCol == _currentCell.get_col() - 1) {
+				return Direction.Left;
+			}
+			else {
+				return Direction.Right;
+			}
+		}
+		else { assert false; return null; }
 	}
 	
 	// A* implementation
@@ -60,15 +96,17 @@ public class MazeBot extends Robot {
 	private List<Cell> FindRoute() {
 		PriorityQueue<EvaluatedCell> queue = new PriorityQueue<>();
 		int[] estimatedCells = createEstimation();
-		while(_currentCell != null && _currentCell.get_cell().compareTo(_goalCell) != 0) {
-			_closedCells[_currentCell.get_row()*_fieldSize+_currentCell.get_col()] = true; // After choosing we close the cell
-			queue.addAll(get_neighbours(_currentCell,queue,estimatedCells));
-			_currentCell = queue.poll();
+		EvaluatedCell currentCellWhileFindingRoute = new EvaluatedCell(_currentCell,0,0,new ArrayList<Cell>()); // Estimation here is not going to be taken into account since the cell 
+			 																								  // will not appear in the queue
+		while(currentCellWhileFindingRoute != null && currentCellWhileFindingRoute.get_cell().compareTo(_goalCell) != 0) {
+			_closedCells[currentCellWhileFindingRoute.get_row()*_fieldSize+currentCellWhileFindingRoute.get_col()] = true; // After choosing we close the cell
+			queue.addAll(get_neighbours(currentCellWhileFindingRoute,queue,estimatedCells));
+			currentCellWhileFindingRoute = queue.poll();
 		}
-		if (_currentCell == null) { // The goal state is not accesible so we haven't found any path
+		if (currentCellWhileFindingRoute == null) { // The goal state is not accesible so we haven't found any path
 			return null;
 		}
-		return _currentCell.get_pathFromStart(); 
+		return currentCellWhileFindingRoute.get_pathFromStart(); 
 	}
 	
 	// Heuristic function result written into every cell, manhattan distance from the goal state

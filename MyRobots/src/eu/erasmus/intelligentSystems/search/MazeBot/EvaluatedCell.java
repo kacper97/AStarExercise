@@ -23,6 +23,7 @@ public class EvaluatedCell implements Comparable<EvaluatedCell> {
 		return _cost;
 	}
 	
+	
 	public Cell get_cell() {
 		return _cell;
 	}
