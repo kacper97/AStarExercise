@@ -12,7 +12,8 @@ public class RouteFinder {
 		// Show the Robocode battle view
 		engine.setVisible(true);
 		// Create the battlefield
-		int generateObstaclesSeed = 1;
+		int generateObstaclesSeed = 1101;
+		int agentSeed = 2;
 		int fieldSize = 7;
 		int NumPixelRows = 64*fieldSize; 
 		int NumPixelCols = 64*fieldSize;
@@ -40,7 +41,6 @@ public class RouteFinder {
 		 * Create the agent and place it in a random position without obstacle
 		 */
 		existingRobots[NumObstacles] = modelRobots[1]; 
-		int agentSeed = 2;
 		placeAgent(agentSeed,fieldSize,NumObstacles,robotSetups,occupiedFields);
 		
 		/* Create and run the battle */

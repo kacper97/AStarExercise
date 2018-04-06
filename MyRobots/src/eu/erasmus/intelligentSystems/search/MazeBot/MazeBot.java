@@ -8,7 +8,7 @@ import robocode.Robot;
 
 public class MazeBot extends Robot {
 	private int _fieldSize = 7;
-	private int _obstacleSeed = 1;
+	private int _obstacleSeed = 1101;
 	private int _agentSeed = 2;
 	private int _numObstacles = _fieldSize * _fieldSize * 3 / 10;
 	private boolean[] _closedCells;
@@ -47,7 +47,8 @@ public class MazeBot extends Robot {
 			i = generator.nextInt(_fieldSize);
 			j = generator.nextInt(_fieldSize);
 		}
-		_goalCell = new Cell(i,j); // TODO set the goal on the edge of the map
+		//_goalCell = new Cell(i,j); // TODO set the goal on the edge of the map
+		_goalCell = new Cell(5,4); // TODO only for testing, delete later
 	}
 	
 	public void run() {
