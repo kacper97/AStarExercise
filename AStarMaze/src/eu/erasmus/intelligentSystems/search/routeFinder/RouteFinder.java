@@ -12,9 +12,9 @@ public class RouteFinder {
 		// Show the Robocode battle view
 		engine.setVisible(true);
 		// Create the battlefield
-		int generateObstaclesSeed = 1101;
+		int generateObstaclesSeed = 11010;
 		int agentSeed = 2;
-		int fieldSize = 7;
+		int fieldSize = 20;
 		int NumPixelRows = 64*fieldSize; 
 		int NumPixelCols = 64*fieldSize;
 		int NumObstacles = fieldSize*fieldSize * 3 / 10;
