@@ -48,8 +48,7 @@ public class MazeBot extends Robot {
 			i = generator.nextInt(_fieldSize);
 			j = generator.nextInt(_fieldSize);
 		}
-		_goalCell = new Cell(i,j); // TODO set the goal on the edge of the map
-		//_goalCell = new Cell(5,4); // TODO only for testing, delete later
+		_goalCell = new Cell(i,j); // ?Set the goal on the edge of the map? Not the best idea because it is not unusual that all cells on edges are occupied
 	}
 	
 	public void run() {
@@ -70,7 +69,14 @@ public class MazeBot extends Robot {
 	private void changeOrientationByNextPosition(Cell nextCell) {
 		Direction newDirection = whichWayToMove(nextCell.get_row(), nextCell.get_col());
 		double difference = newDirection.get_degress() - _direction.get_degress();
-		//if (difference < 0) { difference += 360;}
+		if (Math.abs(difference) > 180) {  // This secures that robots never makes bigger turn than 180 degrees, so his movement is more nautral
+			if(difference > 0) {
+				difference = difference - 360;
+			}
+			else {
+				difference = 360 + difference;
+			}
+		}
 		turnRight(difference);
 		_direction = newDirection;
 	}
