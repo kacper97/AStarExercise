@@ -12,9 +12,9 @@ public class RouteFinder {
 		// Show the Robocode battle view
 		engine.setVisible(true);
 		// Create the battlefield
-		int generateObstaclesSeed = 11010;
-		int agentSeed = 2;
-		int fieldSize = 20;
+		int generateObstaclesSeed = 110100;
+		int agentSeed = generateObstaclesSeed;
+		int fieldSize = 15;
 		int NumPixelRows = 64*fieldSize; 
 		int NumPixelCols = 64*fieldSize;
 		int NumObstacles = fieldSize*fieldSize * 3 / 10;
@@ -49,9 +49,9 @@ public class RouteFinder {
 		// Run our specified battle and let it run till it is over
 		engine.runBattle(battleSpec, true); // waits till the battle finishes
 		// Cleanup our RobocodeEngine
-		//engine.close();
+		engine.close();
 		// Make sure that the Java VM is shut down properly
-		//System.exit(0);
+		System.exit(0);
 	}
 	
 	private static boolean[] generateObstacleMap(int fieldSize,int seed, int numObstacles){

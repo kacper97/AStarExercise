@@ -8,9 +8,9 @@ import java.util.Random;
 import robocode.Robot;
 
 public class MazeBot extends Robot {
-	private int _fieldSize = 20;
-	private int _obstacleSeed = 11010;
-	private int _agentSeed = 2;
+	private int _fieldSize = 15;
+	private int _obstacleSeed = 110100;
+	private int _agentSeed = _obstacleSeed;
 	private int _numObstacles = _fieldSize * _fieldSize * 3 / 10;
 	private boolean[] _closedCells;
 	private Cell _currentCell;
@@ -124,6 +124,7 @@ public class MazeBot extends Robot {
 		int[] evaluated = new int[_fieldSize*_fieldSize];
 		for(int i = 0; i < _fieldSize; i++) {
 			for(int j = 0; j < _fieldSize; j++) {
+				if (_closedCells[i*_fieldSize + j]) continue; // Avoiding computation for obstacles
 				evaluated[i*_fieldSize + j] = Math.abs(i - _goalCell.get_row()) + Math.abs(j - _goalCell.get_col()); // Manhattan distance 
 			}
 		}
